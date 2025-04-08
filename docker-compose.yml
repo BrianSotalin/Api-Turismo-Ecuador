@@ -1,0 +1,16 @@
+version: '2'
+services:
+  api-container:
+    build:
+      context: .  # Esto indica que se usará el Dockerfile en el directorio actual
+    ports:
+      - "3000:3000"  # Mapea el puerto 3000 del contenedor al puerto 3000 en tu máquina host
+    networks:
+      - red-api-turismo  # Conecta este servicio a la red 'red-api-turismo'
+    env_file:
+      - .env  # Carga las variables de entorno desde el archivo .env
+    restart: always  # Opcional: Para asegurarse de que se reinicie automáticamente si falla
+
+networks:
+  red-api-turismo:
+    external: true  # Indica que la red 'red-api-turismo' ya está creada y es externa a Docker Compose
