@@ -1,0 +1,33 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.EC2_KEY }}" > ec2_key.pem
+          chmod 600 ec2_key.pem
+
+      - name: Copy files to EC2
+        run: |
+          rsync -avz -e "ssh -i ec2_key.pem -o StrictHostKeyChecking=no" ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/my-api
+
+      - name: SSH into EC2 and deploy
+        run: |
+          ssh -i ec2_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd ~/api-turismo
+            docker stop api-turismo || true
+            docker rm api-turismo || true
+            docker build -t api-turismo .
+            docker run -d -p 80:3000 --name node-api-turismo api-turismo
+          EOF
