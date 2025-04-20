@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-console.log('📦 Variables de entorno cargadas:\n');
+console.log('Variables de entorno cargadas:\n');
 
 const keys = ['DB_USER', 'DB_HOST', 'DB_NAME', 'DB_PASS', 'DB_PORT'];
 
