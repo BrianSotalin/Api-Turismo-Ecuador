@@ -29,14 +29,28 @@ jobs:
       - name: Copy files to EC2
         run: |
           rsync -avz -e "ssh -i ec2_key.pem -o StrictHostKeyChecking=no" ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/api-turismo
-
+      - name: Create .env file on EC2
+        run: |
+          ssh -i ec2_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            cat <<EOT > /home/${{ secrets.EC2_USER }}/api-turismo/.env
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASS=${{ secrets.DB_PASS }}
+            EOT
+          EOF
       - name: SSH into EC2 and deploy
         run: |
           ssh -i ec2_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             cd ~/api-turismo
+            # Detener y eliminar el contenedor si existe
             docker stop node-api-turismo || true
             docker rm node-api-turismo || true
+            # Detener y eliminar el contenedor si existe
             docker rmi api-turismo || true
+            # Construir la nueva imagen
             docker build -t api-turismo .
-            docker run -d -p 80:3000 --name node-api-turismo api-turismo
+            # Ejecutar contenedor usando el archivo .env
+            docker run -d -p 80:3000 --name node-api-turismo --env-file .env api-turismo
           EOF
