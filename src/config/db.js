@@ -1,6 +1,9 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 const fs = require('fs');
+const path = require('path');
+
+const useSSL = process.env.DB_SSL === 'true';
 
 const pool = new Pool({
   user: process.env.DB_USER,
