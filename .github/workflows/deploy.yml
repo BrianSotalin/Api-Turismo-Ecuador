@@ -37,11 +37,12 @@ jobs:
         run: |
           ssh -i ec2_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
             cat <<EOT > /home/${{ secrets.EC2_USER }}/api-turismo/.env
-            DB_HOST=${{ secrets.DB_HOST }}?sslmode=require
+            DB_HOST=${{ secrets.DB_HOST }}
             DB_NAME=${{ secrets.DB_NAME }}
             DB_PORT=${{ secrets.DB_PORT }}
             DB_USER=${{ secrets.DB_USER }}
             DB_PASS=${{ secrets.DB_PASS }}
+            DB_SSL=true
             EOT
           EOF
       - name: SSH into EC2 and deploy

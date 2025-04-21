@@ -8,10 +8,12 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
   port: process.env.DB_PORT,
-  ssl: {
-    rejectUnauthorized: true, // Establecer en true si usas certificados
-    ca: fs.readFileSync('/app/rds-combined-ca-bundle.pem').toString() // Ruta al certificado montado en el contenedor
-  }
+  ssl: useSSL
+    ? {
+        rejectUnauthorized: true,
+        ca: fs.readFileSync(path.join(__dirname, 'certs', 'rds-combined-ca-bundle.pem')).toString(),
+      }
+    : false,
 });
 
 module.exports = pool;
