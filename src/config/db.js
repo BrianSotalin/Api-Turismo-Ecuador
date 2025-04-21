@@ -14,7 +14,7 @@ const pool = new Pool({
   ssl: useSSL
     ? {
         rejectUnauthorized: true,
-        ca: fs.readFileSync(path.join(__dirname, 'certs', 'rds-combined-ca-bundle.pem')).toString(),
+        ca: fs.readFileSync('/app/rds-combined-ca-bundle.pem').toString(),
       }
     : false,
 });
