@@ -24,7 +24,11 @@ jobs:
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV  
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "DB_PASS=${{ secrets.DB_PASS }}" >> $GITHUB_ENV    
+          echo "DB_PASS=${{ secrets.DB_PASS }}" >> $GITHUB_ENV  
+
+      - name: Save SSL Certificate for RDS
+        run: |
+          echo "${{ secrets.RDS_SSL_CERTIFICATE }}" > rds-combined-ca-bundle.pem
 
       - name: Copy files to EC2
         run: |
@@ -52,5 +56,5 @@ jobs:
             # Construir la nueva imagen
             docker build -t api-turismo .
             # Ejecutar contenedor usando el archivo .env
-            docker run -d -p 80:3000 --name node-api-turismo --env-file .env api-turismo
+            docker run -d -p 80:3000 --name node-api-turismo --env-file .env --mount type=bind,source=$(pwd)/rds-combined-ca-bundle.pem,target=/app/rds-combined-ca-bundle.pem api-turismo
           EOF
