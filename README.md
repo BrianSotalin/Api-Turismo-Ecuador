@@ -104,6 +104,7 @@ jobs:
 ## 🔐 Variables de Entorno
 
 Crear un archivo .env en el proyecto con las credenciales necesarias:
+
 DB_HOST=xxx
 DB_USER=xxx
 DB_PASSWORD=xxx
@@ -111,6 +112,7 @@ DB_NAME=xxx
 PORT=3000
 
 En GitHub, configura en Settings > Secrets and variables > Actions:
+
 	•	EC2_HOST → IP pública de la instancia
 	•	EC2_SSH_KEY → Clave privada SSH de acceso a EC2
 
