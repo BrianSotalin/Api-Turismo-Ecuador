@@ -15,6 +15,7 @@ Este proyecto muestra cómo desplegar una **API en Node.js** dentro de un conten
 Usuario ──> Nginx (EC2) ──> API Node.js (Docker)
          │
          └──> Página estática (S3)
+```txt
 ## ⚙️ Tecnologías
 	•	Node.js → Backend API
 	•	Docker → Contenerización de la aplicación
