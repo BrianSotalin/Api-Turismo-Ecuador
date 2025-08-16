@@ -15,7 +15,7 @@ Este proyecto muestra cómo desplegar una **API en Node.js** dentro de un conten
 Usuario ──> Nginx (EC2) ──> API Node.js (Docker)
          │
          └──> Página estática (S3)
-#⚙️ Tecnologías
+## ⚙️ Tecnologías
 	•	Node.js → Backend API
 	•	Docker → Contenerización de la aplicación
 	•	Nginx → Reverse proxy
@@ -25,7 +25,7 @@ Usuario ──> Nginx (EC2) ──> API Node.js (Docker)
 
 ⸻
 
-#🚀 Pasos de Despliegue
+## 🚀 Pasos de Despliegue
 
 1️⃣ Configuración del proyecto
 	•	Crear la API en Node.js
@@ -58,7 +58,7 @@ server {
         proxy_pass https://tu-bucket-s3.s3-website-region.amazonaws.com/;
     }
 }
-#4️⃣ Configuración de GitHub Actions
+4️⃣ Configuración de GitHub Actions
 
 Ejemplo de workflow .github/workflows/deploy.yml
 name: Deploy to EC2
@@ -100,7 +100,7 @@ jobs:
             docker build -t mi-api-node .
             docker run -d -p 3000:3000 --name api mi-api-node
             sudo systemctl restart nginx
-#🔐 Variables de Entorno
+## 🔐 Variables de Entorno
 
 Crear un archivo .env en el proyecto con las credenciales necesarias:
 DB_HOST=xxx
